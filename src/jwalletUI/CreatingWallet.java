@@ -44,7 +44,7 @@ public class CreatingWallet extends JDialog{
         super.add(createPasswordPanel());
         super.add(createBalancePanel());
         super.add(createButtonsPanel());
-
+ 
         super.getRootPane().setDefaultButton(create);
         
         super.setVisible(true);
@@ -54,6 +54,7 @@ public class CreatingWallet extends JDialog{
         namePanel = new JPanel();
         nameInput = new JTextField();
         nameInput.setText("John Doe");
+        nameInput.setToolTipText("Your name !");
         nameInput.addFocusListener(new FocusListener() {
 
             @Override
@@ -62,6 +63,10 @@ public class CreatingWallet extends JDialog{
                 nameInput.setText("");
                 namePanel.setBorder(BorderFactory.createTitledBorder("Owner"));
                 pack();
+                } else {
+                    nameInput.setText(nameInput.getText());
+                    namePanel.setBorder(BorderFactory.createTitledBorder("Owner"));
+                    
                 }
             }
 
@@ -78,7 +83,6 @@ public class CreatingWallet extends JDialog{
         namePanel.setLayout(new FlowLayout());
         namePanel.add(nameInput);
         
-        
         return namePanel;
     }
     
@@ -86,6 +90,7 @@ public class CreatingWallet extends JDialog{
         balancePanel = new JPanel();
         balanceInput = new JTextField();
         balanceInput.setText("0.00 €");
+        balanceInput.setToolTipText("The amount of money the wallet already has.");
         balanceInput.addFocusListener(new FocusListener() {
 
             @Override
@@ -103,6 +108,8 @@ public class CreatingWallet extends JDialog{
                     balanceInput.setText("0.00 €");
                     balancePanel.setBorder(null);
                     
+                } else if (balanceInput.getText().contains("€")){
+                    balanceInput.setText(balanceInput.getText().replaceAll("€", ""));
                 }
             }
         });
@@ -117,6 +124,7 @@ public class CreatingWallet extends JDialog{
         passwordPanel = new JPanel();
         passwordInput = new JPasswordField();
         passwordInput.setText("Password");
+        passwordInput.setToolTipText("The password to open your wallet. Try something sneaky !");
         passwordInput.addFocusListener(new FocusListener() {
 
             @Override
