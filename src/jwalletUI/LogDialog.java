@@ -23,11 +23,6 @@ public class LogDialog extends JDialog {
     JLabel spentLabel;
     JTextField spentInput;
     
-    String[] columnNames = {"Type","Amount","Reason","Date"}; 
-    Object[][] dataDeposits;
-    JTable table;
-    
-    
     
     public LogDialog(Wallet w){
         super();
@@ -59,22 +54,13 @@ public class LogDialog extends JDialog {
     }
     
     public JPanel createBottomPanel(){
-        dataDeposits = new Object[1][4];
-//        for(int i = 0; i < w.getDeposits().size(); i++){
-//            dataDeposits[i] = w.getDeposits().get(i).getArrayDeposit();
-//        }
-        dataDeposits[0] = w.getDeposits().get(0).getArrayDeposit();
-        
-        
-        table = new JTable(dataDeposits, columnNames);
-        
+               
         bottom = new JPanel();
-//        JList listD = new JList(w.getDeposits().toArray());
-//        JList listW = new JList(w.getWithdraws().toArray());
-//        bottom.setLayout(new GridLayout(2,1));
-//        bottom.add(listD);
-//        bottom.add(listW);
-        bottom.add(table);
+        JList listD = new JList(w.getDeposits().toArray());
+        JList listW = new JList(w.getWithdraws().toArray());
+        bottom.setLayout(new GridLayout(2,1));
+        bottom.add(listD);
+        bottom.add(listW);
         
         return bottom;
     }
