@@ -34,7 +34,9 @@ public class MainWindow extends JFrame {
     JMenuBar mb;
     JMenu wallet, info, date;
     JMenuItem open, create, save, load, exit, help;
-
+    Boolean isOpen = false;
+    
+    
     CreatingWalletWindow cw;
     Wallet w;
 
@@ -125,6 +127,7 @@ public class MainWindow extends JFrame {
                         if (pass.getText().equals(w.getPassword())) {
                             addWalletMenu(w);
                             open.setEnabled(false);
+                            isOpen = true;
                             revalidate();
                         } else {
                             JOptionPane.showMessageDialog(null, "Wrong Password!");
@@ -216,6 +219,11 @@ public class MainWindow extends JFrame {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setFileFilter(new FileNameExtensionFilter("Wallet file ", "wallet"));
                 
+                if(isOpen){
+                  JOptionPane.showMessageDialog(null, "A wallet is open, close it before loading another wallet please.");
+                  
+                } else {
+                
                 int op = chooser.showOpenDialog(null);
                 if (op == JFileChooser.APPROVE_OPTION) {
                     f = chooser.getSelectedFile();
@@ -239,7 +247,7 @@ public class MainWindow extends JFrame {
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
+                }
                 }
             }
         });
@@ -431,6 +439,7 @@ public class MainWindow extends JFrame {
                         mb.remove(jm);
                         create.setEnabled(true);
                         save.setEnabled(false);
+                        isOpen = false;
                         revalidate();
                     } else {
                         JOptionPane.showMessageDialog(null, "Wrong Password!");
@@ -448,6 +457,7 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 mb.remove(jm);
                 open.setEnabled(true);
+                isOpen = false;
                 revalidate();
             }
         });
