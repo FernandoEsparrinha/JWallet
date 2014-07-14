@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
  */
 public class Withdraw implements Serializable{
 
+    String array[];
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
     float amount;
     String reason;
     Date date;
@@ -29,6 +31,11 @@ public class Withdraw implements Serializable{
             w.setBalance(w.getBalance() - amount);
             w.getWithdraws().add(this);
             w.setSpendings(w.getSpendings() + amount);
+            array = new String[4];
+            array[0] = "Withdraw";
+            array[1] = Float.toString(amount)+" €";
+            array[2] = reason;
+            array[3] = dateFormat.format(getDate());
     }
 
     
@@ -54,6 +61,10 @@ public class Withdraw implements Serializable{
 
     public void setDate(Date date) {
         this.date = date;
+    }
+    
+    public String[] getArrayDeposit(){
+           return array;
     }
     
     

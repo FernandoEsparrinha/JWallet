@@ -19,11 +19,11 @@ import java.util.Date;
 public class Deposit  implements Serializable{
     
     String array[];
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
     float amount;
     String reason;
     Date date;
     Wallet w;
-    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
     
     public Deposit(float amount, String reason, Wallet w){
         this.amount = amount;
@@ -31,8 +31,9 @@ public class Deposit  implements Serializable{
         date = new Date();
         w.setBalance(w.getBalance() + amount);
         w.getDeposits().add(this);
+        array = new String[4];
         array[0] = "Deposit";
-        array[1] = Float.toString(amount);
+        array[1] = Float.toString(amount)+" €";
         array[2] = reason;
         array[3] = dateFormat.format(getDate());
         
