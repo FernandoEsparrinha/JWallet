@@ -394,22 +394,30 @@ public class MainWindow extends JFrame {
                     panel.add(ap);
                     panel.add(rp);
 
+                    if(w.getBalance()==0){
+                        JOptionPane.showMessageDialog(null, "You don't have money to take away !! ");
+                    
+                    } else {
+                    
                     int op = JOptionPane.showConfirmDialog(null, panel, "Withdraw", JOptionPane.OK_CANCEL_OPTION);
                     if (op == JOptionPane.OK_OPTION) {
                         float amount = Float.parseFloat(amountInput.getText());
                         String reason = reasonInput.getText();
-                        if (amount < w.getBalance()) {
+                        if (amount <= w.getBalance()) {
                             w.addWithdraw(amount, reason);
                         } else {
                             JOptionPane.showMessageDialog(null, "Insuficient funds !\nCurrent Balance :" + w.getBalance() + "€");
                         }
+                    }
                     }
                 } catch (NullPointerException e) {
 
                 }
                 balanceItem.setText("Balance : " + w.getBalance() + "€");
                 revalidate();
-            }
+                
+                }
+            
         });
         jm.add(takeMoneyItem);
 
@@ -469,7 +477,9 @@ public class MainWindow extends JFrame {
             }
         });
         jm.add(logOutItem);
-
+        jm.setMnemonic('w');
+        
+        
         mb.add(jm);
     }
 
