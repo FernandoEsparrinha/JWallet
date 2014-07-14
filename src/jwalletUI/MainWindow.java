@@ -33,9 +33,9 @@ public class MainWindow extends JFrame {
 
     JMenuBar mb;
     JMenu wallet, info, date;
-    JMenuItem open, create, save, load, exit;
+    JMenuItem open, create, save, load, exit, help;
 
-    CreatingWallet cw;
+    CreatingWalletWindow cw;
     Wallet w;
 
     public MainWindow() {
@@ -147,7 +147,7 @@ public class MainWindow extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                cw = new CreatingWallet();
+                cw = new CreatingWalletWindow();
                 if(cw.getWallet() == null){
                     create.setEnabled(true);
                     save.setEnabled(false);
@@ -207,6 +207,7 @@ public class MainWindow extends JFrame {
     public JMenuItem createLoadItem() {
         load = new JMenuItem("Load");
         load.addActionListener(new ActionListener() {
+        
 
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -262,16 +263,38 @@ public class MainWindow extends JFrame {
 
     public JMenu createInfoMenu() {
         info = new JMenu("Info");
+        info.add(createHelpItem());
         return info;
     }
 
+    public JMenuItem createHelpItem(){
+        help = new JMenuItem("Help");
+        help.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
+        help.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                HelpDialog hd = new HelpDialog();
+            }
+        });
+        return help;
+    }
+    
     public void sair() {
+        
+        if(w==null){
+            int op = JOptionPane.showOptionDialog(null, "You haven't even created a wallet yet ! Do you really wish to leave ?", "Exit", JOptionPane.YES_NO_OPTION, 3, null, null, null);
+            if(op == JOptionPane.YES_OPTION){
+                System.exit(0);
+            }
+        } else {
         int op = JOptionPane.showOptionDialog(null, "Do you wish to save before quiting ?", "Exit", JOptionPane.YES_NO_CANCEL_OPTION, 3, null, null, null);
         if (op == JOptionPane.YES_OPTION) {
             save.getActionListeners()[0].actionPerformed(null);
             System.exit(0);
         } else if (op == JOptionPane.NO_OPTION){
             System.exit(0);
+        }
         }
     }
 

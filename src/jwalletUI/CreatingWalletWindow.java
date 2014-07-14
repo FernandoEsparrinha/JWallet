@@ -23,7 +23,7 @@ import jwalletController.Wallet;
  *
  * @author fernando
  */
-public class CreatingWallet extends JDialog{
+public class CreatingWalletWindow extends JDialog{
     
     JPanel namePanel, balancePanel,passwordPanel, buttonsPanel;
     JTextField nameInput, balanceInput;
@@ -32,7 +32,7 @@ public class CreatingWallet extends JDialog{
     
     Wallet w;
     
-    public CreatingWallet(){
+    CreatingWalletWindow(){
         super();
         super.setSize(250, 150);
         super.setTitle("Creating wallet");
