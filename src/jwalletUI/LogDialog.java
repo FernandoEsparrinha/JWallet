@@ -7,8 +7,15 @@ package jwalletUI;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Comparator;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import jwalletController.*;
 
 /**
@@ -19,7 +26,7 @@ public class LogDialog extends JDialog {
 
     public Wallet w;
 
-    JPanel top, bottom;
+    JPanel top, bottom, emptyPanel;
     JLabel spentLabel, emptyLabel;
     JTextField spentInput;
 
@@ -36,12 +43,12 @@ public class LogDialog extends JDialog {
         super.setTitle("Log");
 
         this.w = w;
-        
-        if(w.getDeposits().isEmpty() && w.getWithdraws().isEmpty()){
-            super.add(createEmptyLabel());
+
+        if (w.getDeposits().isEmpty() && w.getWithdraws().isEmpty()) {
+            super.add(createEmptyPanel());
         } else {
-        super.add(createTopPanel(),BorderLayout.NORTH);
-        super.add(createBottomPanel(),BorderLayout.CENTER);
+            super.add(createTopPanel(), BorderLayout.NORTH);
+            super.add(createBottomPanel(), BorderLayout.CENTER);
         }
 
         super.setVisible(true);
@@ -61,7 +68,7 @@ public class LogDialog extends JDialog {
     }
 
     public JPanel createBottomPanel() {
-        int size = w.getDeposits().size()+w.getWithdraws().size();
+        int size = w.getDeposits().size() + w.getWithdraws().size();
         data = new String[size][4];
         names = new String[4];
         names[0] = "Type";
@@ -72,11 +79,10 @@ public class LogDialog extends JDialog {
         for (int i = 0; i < w.getDeposits().size(); i++) {
             data[i] = w.getDeposits().get(i).getArrayDeposit();
         }
-        for(int j = w.getDeposits().size(); j < size; j++ ){
+        for (int j = w.getDeposits().size(); j < size; j++) {
             data[j] = w.getWithdraws().get(j - w.getDeposits().size()).getArrayDeposit();
         }
 
-        
         table = new JTable(data, names);
         table.setModel(new AbstractTableModel() {
 
@@ -99,15 +105,20 @@ public class LogDialog extends JDialog {
                 return data[i][i1];
             }
 
+            public Class<?> getColumnClass(int columnIndex) {
+                return Integer.class;
+            }
+
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
         });
 
-       table.getColumnModel().getColumn(3).setPreferredWidth(90);
+        table.getColumnModel().getColumn(3).setPreferredWidth(90);
+        table.getTableHeader().setReorderingAllowed(false);
         
         table.setAutoCreateRowSorter(true);
-        
+
         JScrollPane scrollPane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
 
@@ -116,13 +127,41 @@ public class LogDialog extends JDialog {
 
         return bottom;
     }
-    
-    public JLabel createEmptyLabel(){
-        emptyLabel = new JLabel("<html><font size=\"5\"><center>You still haven't made any transactions ! How do you want to see your log if you haven't made transactions ? Go make some right now !</center></font></html>");
-        super.setSize(300, 200);
-        super.setLocationRelativeTo(null);
+
+    public JPanel createEmptyPanel() {
+        emptyPanel = new JPanel();
         
-        return emptyLabel;
+        Image img = Toolkit.getDefaultToolkit().createImage("src/resources/empty.png");
+        JLabel image = new JLabel(new ImageIcon(img));
+        emptyPanel.setLayout(new GridLayout(3,1));
+        
+        JButton exit = new JButton();
+        exit.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                dispose();
+            }
+        });
+        exit.setVisible(false);
+        
+        
+        emptyLabel = new JLabel("<html><font size=\"3\"><center>You still haven't made "
+                + "any transactions ! Go make some "
+                + "right now !<br><br>"
+                + "<br><font size=\"1\">press enter to close</font></center></font></html>");
+        
+        super.setSize(250, 330);
+        super.setLocationRelativeTo(null);
+        super.setUndecorated(true);
+        
+        emptyPanel.add(image);
+        emptyPanel.add(emptyLabel);
+        emptyPanel.add(exit);
+        
+        getRootPane().setDefaultButton(exit);
+        
+        return emptyPanel;
     }
-    
+
 }

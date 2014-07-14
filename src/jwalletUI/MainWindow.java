@@ -35,7 +35,7 @@ public class MainWindow extends JFrame {
     JMenu wallet, info, date;
     JMenuItem open, create, save, load, exit, help;
     Boolean isOpen = false;
-    
+    Boolean close = false;
     
     CreatingWalletWindow cw;
     Wallet w;
@@ -151,7 +151,7 @@ public class MainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 cw = new CreatingWalletWindow();
-                if(cw.getWallet() == null){
+                if (cw.getWallet() == null) {
                     create.setEnabled(true);
                     save.setEnabled(false);
                 } else {
@@ -168,6 +168,7 @@ public class MainWindow extends JFrame {
 
     public JMenuItem createSaveItem() {
         save = new JMenuItem("Save");
+        save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
         save.addActionListener(new ActionListener() {
 
             @Override
@@ -179,16 +180,16 @@ public class MainWindow extends JFrame {
                     JFileChooser chooser = new JFileChooser();
                     chooser.setFileFilter(new FileNameExtensionFilter("Wallet file", "wallet"));
                     chooser.setAcceptAllFileFilterUsed(false);
-                    
-                    
+
                     int op = chooser.showSaveDialog(null);
                     if (op == JFileChooser.APPROVE_OPTION) {
-                        f = new File(chooser.getSelectedFile()+".wallet");
-
+                        f = new File(chooser.getSelectedFile() + ".wallet");
+                        
                         try {
                             output = new FileOutputStream(f);
                             ObjectOutputStream out = new ObjectOutputStream(output);
                             out.writeObject(w);
+                            close = true;
                             out.close();
                             output.close();
                         } catch (FileNotFoundException ex) {
@@ -197,6 +198,8 @@ public class MainWindow extends JFrame {
                             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
+                    } else if (op == JFileChooser.CANCEL_OPTION){
+                        close = false;
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Wallet not created !");
@@ -209,8 +212,8 @@ public class MainWindow extends JFrame {
 
     public JMenuItem createLoadItem() {
         load = new JMenuItem("Load");
+        load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
         load.addActionListener(new ActionListener() {
-        
 
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -218,36 +221,38 @@ public class MainWindow extends JFrame {
                 File f;
                 JFileChooser chooser = new JFileChooser();
                 chooser.setFileFilter(new FileNameExtensionFilter("Wallet file ", "wallet"));
-                
-                if(isOpen){
-                  JOptionPane.showMessageDialog(null, "A wallet is open, close it before loading another wallet please.");
-                  
+
+                if (isOpen) {
+                    JOptionPane.showMessageDialog(null, "A wallet is open, close it before loading another wallet please.");
+
                 } else {
-                
-                int op = chooser.showOpenDialog(null);
-                if (op == JFileChooser.APPROVE_OPTION) {
-                    f = chooser.getSelectedFile();
-                    try {
-                        input = new FileInputStream(f);
-                        ObjectInputStream in = new ObjectInputStream(input);
-                        w = (Wallet) in.readObject();
-                        if(w == null){
-                            open.setEnabled(false);
-                            create.setEnabled(true);
-                        } else {
-                            open.setEnabled(true);
-                            create.setEnabled(false);
+
+                    int op = chooser.showOpenDialog(null);
+                    if (op == JFileChooser.APPROVE_OPTION) {
+                        f = chooser.getSelectedFile();
+                        try {
+                            input = new FileInputStream(f);
+                            ObjectInputStream in = new ObjectInputStream(input);
+                            w = (Wallet) in.readObject();
+                            if (w == null) {
+                                open.setEnabled(false);
+                                create.setEnabled(true);
+                                save.setEnabled(false);
+                            } else {
+                                open.setEnabled(true);
+                                create.setEnabled(false);
+                                save.setEnabled(true);
+                            }
+                            in.close();
+                            input.close();
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        in.close();
-                        input.close();
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
                 }
             }
         });
@@ -275,7 +280,7 @@ public class MainWindow extends JFrame {
         return info;
     }
 
-    public JMenuItem createHelpItem(){
+    public JMenuItem createHelpItem() {
         help = new JMenuItem("Help");
         help.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
         help.addActionListener(new ActionListener() {
@@ -287,22 +292,24 @@ public class MainWindow extends JFrame {
         });
         return help;
     }
-    
+
     public void sair() {
-        
-        if(w==null){
+
+        if (w == null) {
             int op = JOptionPane.showOptionDialog(null, "You haven't even created a wallet yet ! Do you really wish to leave ?", "Exit", JOptionPane.YES_NO_OPTION, 3, null, null, null);
-            if(op == JOptionPane.YES_OPTION){
+            if (op == JOptionPane.YES_OPTION) {
                 System.exit(0);
             }
         } else {
-        int op = JOptionPane.showOptionDialog(null, "Do you wish to save before quiting ?", "Exit", JOptionPane.YES_NO_CANCEL_OPTION, 3, null, null, null);
-        if (op == JOptionPane.YES_OPTION) {
-            save.getActionListeners()[0].actionPerformed(null);
-            System.exit(0);
-        } else if (op == JOptionPane.NO_OPTION){
-            System.exit(0);
-        }
+            int op = JOptionPane.showOptionDialog(null, "Do you wish to save before quiting ?", "Exit", JOptionPane.YES_NO_CANCEL_OPTION, 3, null, null, null);
+            if (op == JOptionPane.YES_OPTION) {
+                save.getActionListeners()[0].actionPerformed(null);
+                if(close){
+                    System.exit(0);
+                }
+            } else if (op == JOptionPane.NO_OPTION) {
+                System.exit(0);
+            }
         }
     }
 
@@ -434,7 +441,7 @@ public class MainWindow extends JFrame {
 
                 int op = JOptionPane.showConfirmDialog(null, panel, "Password", JOptionPane.OK_CANCEL_OPTION);
                 if (op == JOptionPane.YES_OPTION) {
-                    if (pass.getText().equals(w.getPassword())) {                        
+                    if (pass.getText().equals(w.getPassword())) {
                         removeWallet();
                         mb.remove(jm);
                         create.setEnabled(true);
