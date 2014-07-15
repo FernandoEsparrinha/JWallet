@@ -46,6 +46,7 @@ public class CreatingWalletWindow extends JDialog{
         super.add(createButtonsPanel());
  
         super.getRootPane().setDefaultButton(create);
+        super.setUndecorated(true);
         
         super.setVisible(true);
     }

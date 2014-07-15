@@ -36,7 +36,7 @@ public class MainWindow extends JFrame {
     JMenuItem open, create, save, load, exit, help;
     Boolean isOpen = false;
     Boolean close = false;
-    
+
     CreatingWalletWindow cw;
     Wallet w;
 
@@ -115,24 +115,26 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent ae) {
 
                 if (!(w == null)) {
-                    JPanel panel = new JPanel();
-                    JLabel label = new JLabel("Insert password ");
-                    JPasswordField pass = new JPasswordField(15);
+//                    JPanel panel = new JPanel();
+//                    JLabel label = new JLabel("Insert password ");
+//                    JPasswordField pass = new JPasswordField(15);
+//
+//                    panel.add(label);
+//                    panel.add(pass);
+//
+//                    int op = JOptionPane.showConfirmDialog(null, panel, "Password", JOptionPane.OK_CANCEL_OPTION);
+//                    if (op == JOptionPane.YES_OPTION) {
+//                        if (pass.getText().equals(w.getPassword())) {
+//                            addWalletMenu(w);
+//                            open.setEnabled(false);
+//                            isOpen = true;
+//                            revalidate();
+//                        } else {
+//                            JOptionPane.showMessageDialog(null, "Wrong Password!");
+//                        }
+//                }
+                    OpeningWalletWindow ow = new OpeningWalletWindow(w);
 
-                    panel.add(label);
-                    panel.add(pass);
-
-                    int op = JOptionPane.showConfirmDialog(null, panel, "Password", JOptionPane.OK_CANCEL_OPTION);
-                    if (op == JOptionPane.YES_OPTION) {
-                        if (pass.getText().equals(w.getPassword())) {
-                            addWalletMenu(w);
-                            open.setEnabled(false);
-                            isOpen = true;
-                            revalidate();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Wrong Password!");
-                        }
-                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Wallet not created yet !", "Error", JOptionPane.OK_OPTION);
                 }
@@ -184,7 +186,7 @@ public class MainWindow extends JFrame {
                     int op = chooser.showSaveDialog(null);
                     if (op == JFileChooser.APPROVE_OPTION) {
                         f = new File(chooser.getSelectedFile() + ".wallet");
-                        
+
                         try {
                             output = new FileOutputStream(f);
                             ObjectOutputStream out = new ObjectOutputStream(output);
@@ -198,7 +200,7 @@ public class MainWindow extends JFrame {
                             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
-                    } else if (op == JFileChooser.CANCEL_OPTION){
+                    } else if (op == JFileChooser.CANCEL_OPTION) {
                         close = false;
                     }
                 } else {
@@ -304,7 +306,7 @@ public class MainWindow extends JFrame {
             int op = JOptionPane.showOptionDialog(null, "Do you wish to save before quiting ?", "Exit", JOptionPane.YES_NO_CANCEL_OPTION, 3, null, null, null);
             if (op == JOptionPane.YES_OPTION) {
                 save.getActionListeners()[0].actionPerformed(null);
-                if(close){
+                if (close) {
                     System.exit(0);
                 }
             } else if (op == JOptionPane.NO_OPTION) {
@@ -394,30 +396,30 @@ public class MainWindow extends JFrame {
                     panel.add(ap);
                     panel.add(rp);
 
-                    if(w.getBalance()==0){
+                    if (w.getBalance() == 0) {
                         JOptionPane.showMessageDialog(null, "You don't have money to take away !! ");
-                    
+
                     } else {
-                    
-                    int op = JOptionPane.showConfirmDialog(null, panel, "Withdraw", JOptionPane.OK_CANCEL_OPTION);
-                    if (op == JOptionPane.OK_OPTION) {
-                        float amount = Float.parseFloat(amountInput.getText());
-                        String reason = reasonInput.getText();
-                        if (amount <= w.getBalance()) {
-                            w.addWithdraw(amount, reason);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Insuficient funds !\nCurrent Balance :" + w.getBalance() + "€");
+
+                        int op = JOptionPane.showConfirmDialog(null, panel, "Withdraw", JOptionPane.OK_CANCEL_OPTION);
+                        if (op == JOptionPane.OK_OPTION) {
+                            float amount = Float.parseFloat(amountInput.getText());
+                            String reason = reasonInput.getText();
+                            if (amount <= w.getBalance()) {
+                                w.addWithdraw(amount, reason);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Insuficient funds !\nCurrent Balance :" + w.getBalance() + "€");
+                            }
                         }
-                    }
                     }
                 } catch (NullPointerException e) {
 
                 }
                 balanceItem.setText("Balance : " + w.getBalance() + "€");
                 revalidate();
-                
-                }
-            
+
+            }
+
         });
         jm.add(takeMoneyItem);
 
@@ -478,8 +480,7 @@ public class MainWindow extends JFrame {
         });
         jm.add(logOutItem);
         jm.setMnemonic('w');
-        
-        
+
         mb.add(jm);
     }
 
