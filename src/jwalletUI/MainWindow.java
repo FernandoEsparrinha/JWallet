@@ -83,6 +83,8 @@ public class MainWindow extends JFrame {
         super.setVisible(true);
     }
 
+    
+    // Menu bar
     public JMenuBar createMenuBar() {
         mb = new JMenuBar();
 
@@ -94,6 +96,7 @@ public class MainWindow extends JFrame {
         return mb;
     }
 
+    // Menu that has all the wallet operations
     public JMenu createWalletMenu() {
         wallet = new JMenu("Wallet");
 
@@ -106,6 +109,7 @@ public class MainWindow extends JFrame {
         return wallet;
     }
 
+    // Button that opens a created wallet
     public JMenuItem createOpenItem() {
         open = new JMenuItem("Open");
         open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
@@ -115,25 +119,26 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent ae) {
 
                 if (!(w == null)) {
-//                    JPanel panel = new JPanel();
-//                    JLabel label = new JLabel("Insert password ");
-//                    JPasswordField pass = new JPasswordField(15);
-//
-//                    panel.add(label);
-//                    panel.add(pass);
-//
-//                    int op = JOptionPane.showConfirmDialog(null, panel, "Password", JOptionPane.OK_CANCEL_OPTION);
-//                    if (op == JOptionPane.YES_OPTION) {
-//                        if (pass.getText().equals(w.getPassword())) {
-//                            addWalletMenu(w);
-//                            open.setEnabled(false);
-//                            isOpen = true;
-//                            revalidate();
-//                        } else {
-//                            JOptionPane.showMessageDialog(null, "Wrong Password!");
-//                        }
-//                }
-                    OpeningWalletWindow ow = new OpeningWalletWindow(w);
+                    JPanel panel = new JPanel();
+                    JLabel label = new JLabel("Insert password ");
+                    JPasswordField pass = new JPasswordField(15);
+
+                    panel.add(label);
+                    panel.add(pass);
+
+                    int op = JOptionPane.showConfirmDialog(null, panel, "Password", JOptionPane.OK_CANCEL_OPTION);
+                    if (op == JOptionPane.YES_OPTION) {
+                        if (pass.getText().equals(w.getPassword())) {
+                            addWalletMenu(w);
+                            open.setEnabled(false);
+                            isOpen = true;
+                            revalidate();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Wrong Password!");
+                        }
+                }
+                      //TO DO : Creating Class for the Window that opens the wallet. Instead of JOptionPane
+//                    OpeningWalletWindow ow = new OpeningWalletWindow(w);
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Wallet not created yet !", "Error", JOptionPane.OK_OPTION);
@@ -145,6 +150,7 @@ public class MainWindow extends JFrame {
         return open;
     }
 
+    // Button that creates a Wallet
     public JMenuItem createCreateItem() {
         create = new JMenuItem("Create");
         create.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
@@ -168,6 +174,7 @@ public class MainWindow extends JFrame {
         return create;
     }
 
+    //Button that saves the wallet in a file
     public JMenuItem createSaveItem() {
         save = new JMenuItem("Save");
         save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
@@ -212,6 +219,7 @@ public class MainWindow extends JFrame {
         return save;
     }
 
+    //Button that loads a wallet from a file
     public JMenuItem createLoadItem() {
         load = new JMenuItem("Load");
         load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
@@ -261,6 +269,7 @@ public class MainWindow extends JFrame {
         return load;
     }
 
+    //Button to exit the program
     public JMenuItem createExitItem() {
         exit = new JMenuItem("Exit");
 
@@ -276,12 +285,14 @@ public class MainWindow extends JFrame {
         return exit;
     }
 
+    //Menu that has info about the program
     public JMenu createInfoMenu() {
         info = new JMenu("Info");
         info.add(createHelpItem());
         return info;
     }
 
+    //Button that shows how to use the program
     public JMenuItem createHelpItem() {
         help = new JMenuItem("Help");
         help.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
@@ -295,6 +306,7 @@ public class MainWindow extends JFrame {
         return help;
     }
 
+    //class that asks if you want to save you wallet when you exit
     public void sair() {
 
         if (w == null) {
@@ -315,6 +327,7 @@ public class MainWindow extends JFrame {
         }
     }
 
+    //Puts the date in the right size of the menu bar
     public JMenu createDateMenu() {
         date = new JMenu();
         date.setEnabled(false);
