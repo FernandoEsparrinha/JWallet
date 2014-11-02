@@ -26,7 +26,7 @@ public class LogDialog extends JDialog {
 
     public Wallet w;
 
-    JPanel top, bottom, emptyPanel;
+    JPanel top, bottom, exit, emptyPanel;
     JLabel spentLabel, emptyLabel;
     JTextField spentInput;
 
@@ -49,14 +49,15 @@ public class LogDialog extends JDialog {
         } else {
             super.add(createTopPanel(), BorderLayout.NORTH);
             super.add(createBottomPanel(), BorderLayout.CENTER);
+            super.add(createExit(), BorderLayout.SOUTH);
         }
-
         super.setVisible(true);
     }
 
     /**
      * Creates Panel with the amount of money spent
-     * @return 
+     *
+     * @return
      */
     public JPanel createTopPanel() {
         top = new JPanel();
@@ -73,7 +74,8 @@ public class LogDialog extends JDialog {
 
     /**
      * Creates table with the different Deposits and Withdraws
-     * @return 
+     *
+     * @return
      */
     public JPanel createBottomPanel() {
         int size = w.getDeposits().size() + w.getWithdraws().size();
@@ -124,7 +126,7 @@ public class LogDialog extends JDialog {
 
         table.getColumnModel().getColumn(3).setPreferredWidth(90);
         table.getTableHeader().setReorderingAllowed(false);
-        
+
         table.setAutoCreateRowSorter(true);
 
         JScrollPane scrollPane = new JScrollPane(table);
@@ -138,11 +140,11 @@ public class LogDialog extends JDialog {
 
     public JPanel createEmptyPanel() {
         emptyPanel = new JPanel();
-        
+
         Image img = Toolkit.getDefaultToolkit().createImage("src/resources/empty.png");
         JLabel image = new JLabel(new ImageIcon(img));
-        emptyPanel.setLayout(new GridLayout(3,1));
-        
+        emptyPanel.setLayout(new GridLayout(3, 1));
+
         JButton exit = new JButton();
         exit.addActionListener(new ActionListener() {
 
@@ -152,24 +154,43 @@ public class LogDialog extends JDialog {
             }
         });
         exit.setVisible(false);
-        
-        
+
         emptyLabel = new JLabel("<html><font size=\"3\"><center>You still haven't made "
                 + "any transactions ! Go make some "
                 + "right now !<br><br>"
                 + "<br><font size=\"1\">press enter to close</font></center></font></html>");
-        
+
         super.setSize(250, 330);
         super.setLocationRelativeTo(null);
         super.setUndecorated(true);
-        
+
         emptyPanel.add(image);
         emptyPanel.add(emptyLabel);
         emptyPanel.add(exit);
-        
+
         getRootPane().setDefaultButton(exit);
-        
+
         return emptyPanel;
     }
 
+    public JPanel createExit() {
+        exit = new JPanel();
+        JButton exitBtn = new JButton();
+        exitBtn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                dispose();
+            }
+        });
+        exitBtn.setVisible(false);
+
+        JLabel exitTxt = new JLabel("<html><font size=\"1\">Press enter to close</font></html>", SwingConstants.CENTER);
+        
+        exit.add(exitTxt);
+        exit.add(exitBtn);
+        
+        getRootPane().setDefaultButton(exitBtn);
+        return exit;
+    }
 }

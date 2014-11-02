@@ -38,6 +38,8 @@ public class CreatingWalletWindow extends JDialog{
         super.setTitle("Creating wallet");
         super.setLocationRelativeTo(null);
         super.setLayout(new GridLayout(4,1));
+        super.setResizable(false);
+        
         super.setModal(true);
         
         super.add(createNamePanel());

@@ -5,6 +5,7 @@
  */
 package jwalletUI;
 
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -39,14 +40,17 @@ public class MainWindow extends JFrame {
 
     CreatingWalletWindow cw;
     Wallet w;
+    Image img = Toolkit.getDefaultToolkit().createImage("src/resources/wallet.png");
 
     public MainWindow() {
         //basic window configuration
         super();
-        super.setSize(400, 300);
+        super.setSize(600, 400);
         super.setLocationRelativeTo(null);
         super.setTitle("JWallet");
-
+        super.setResizable(false);
+        super.setUndecorated(true);
+        
         //changing L&F
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -72,7 +76,6 @@ public class MainWindow extends JFrame {
         });
 
         //setting the icon
-        Image img = Toolkit.getDefaultToolkit().createImage("src/resources/wallet.png");
         setIconImage(img);
 
         add(new JLabel(new ImageIcon(img)));
@@ -165,6 +168,8 @@ public class MainWindow extends JFrame {
                     create.setEnabled(false);
                     open.setEnabled(true);
                     save.setEnabled(true);
+                    fillingWalletDetails();
+                    revalidate();
                 }
             }
         });
@@ -172,6 +177,22 @@ public class MainWindow extends JFrame {
         return create;
     }
 
+    public void fillingWalletDetails(){
+        JPanel wI = new JPanel();
+        wI.setLayout(new GridLayout(5,1));
+        
+        JLabel title = new JLabel("Wallet Created !", SwingConstants.CENTER);
+        JLabel name = new JLabel("Name: "+w.getName(), SwingConstants.CENTER);
+        JLabel balance = new JLabel("Balance: "+w.getBalance(), SwingConstants.CENTER);
+        
+        wI.add(title);
+        wI.add(name);
+        wI.add(balance);
+        
+        super.add(wI);
+        
+    }
+    
     //Button that saves the wallet in a file
     public JMenuItem createSaveItem() {
         save = new JMenuItem("Save");
