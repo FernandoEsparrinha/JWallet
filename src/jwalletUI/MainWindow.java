@@ -137,8 +137,6 @@ public class MainWindow extends JFrame {
                             JOptionPane.showMessageDialog(null, "Wrong Password!");
                         }
                 }
-                      //TO DO : Creating Class for the Window that opens the wallet. Instead of JOptionPane
-//                    OpeningWalletWindow ow = new OpeningWalletWindow(w);
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Wallet not created yet !", "Error", JOptionPane.OK_OPTION);

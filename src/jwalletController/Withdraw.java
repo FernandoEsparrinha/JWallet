@@ -63,7 +63,7 @@ public class Withdraw implements Serializable{
         this.date = date;
     }
     
-    public String[] getArrayDeposit(){
+    public String[] getArrayWithdraw(){
            return array;
     }
     

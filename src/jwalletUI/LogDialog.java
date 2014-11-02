@@ -54,6 +54,10 @@ public class LogDialog extends JDialog {
         super.setVisible(true);
     }
 
+    /**
+     * Creates Panel with the amount of money spent
+     * @return 
+     */
     public JPanel createTopPanel() {
         top = new JPanel();
 
@@ -67,6 +71,10 @@ public class LogDialog extends JDialog {
         return top;
     }
 
+    /**
+     * Creates table with the different Deposits and Withdraws
+     * @return 
+     */
     public JPanel createBottomPanel() {
         int size = w.getDeposits().size() + w.getWithdraws().size();
         data = new String[size][4];
@@ -80,7 +88,7 @@ public class LogDialog extends JDialog {
             data[i] = w.getDeposits().get(i).getArrayDeposit();
         }
         for (int j = w.getDeposits().size(); j < size; j++) {
-            data[j] = w.getWithdraws().get(j - w.getDeposits().size()).getArrayDeposit();
+            data[j] = w.getWithdraws().get(j - w.getDeposits().size()).getArrayWithdraw();
         }
 
         table = new JTable(data, names);
