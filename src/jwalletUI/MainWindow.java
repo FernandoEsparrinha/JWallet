@@ -5,9 +5,7 @@
  */
 package jwalletUI;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -140,6 +138,7 @@ public class MainWindow extends JFrame {
                             addWalletMenu(w);
                             open.setEnabled(false);
                             isOpen = true;
+                            
                             revalidate();
                         } else {
                             JOptionPane.showMessageDialog(null, "Wrong Password!");
@@ -205,13 +204,17 @@ public class MainWindow extends JFrame {
         
         JPanel namePanel = new JPanel();
         JLabel name = new JLabel("Name: ");
-        JTextField wName = new JTextField(w.getName());
+        JTextField wName = new JTextField(10);
+        wName.setText(w.getName());
+        wName.setEditable(false);
         namePanel.add(name);
         namePanel.add(wName);
         
         JPanel balancePanel = new JPanel();
         JLabel balance = new JLabel("Balance: ");
-        JTextField wBalance = new JTextField(""+w.getBalance());
+        JTextField wBalance = new JTextField(10);
+        wBalance.setText(""+w.getBalance());
+        wBalance.setEditable(false);
         balancePanel.add(balance);
         balancePanel.add(wBalance);
         
