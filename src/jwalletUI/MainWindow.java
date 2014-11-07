@@ -5,6 +5,8 @@
  */
 package jwalletUI;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -42,6 +44,8 @@ public class MainWindow extends JFrame {
     Wallet w;
     Image img = Toolkit.getDefaultToolkit().createImage("src/resources/wallet.png");
 
+    
+    
     public MainWindow() {
         //basic window configuration
         super();
@@ -78,7 +82,8 @@ public class MainWindow extends JFrame {
         //setting the icon
         setIconImage(img);
 
-        add(new JLabel(new ImageIcon(img)));
+        //Adding the Main Window introduction
+        fillingMainWindow();
 
         //setting the menu
         super.setJMenuBar(createMenuBar());
@@ -177,19 +182,51 @@ public class MainWindow extends JFrame {
         return create;
     }
 
+    public void fillingMainWindow(){
+        super.getContentPane().removeAll();
+        
+        JPanel MainWindowDetails = new JPanel();
+        JLabel cWtext = new JLabel("Welcome to jWallet. Create your wallet in the file menu.");
+        
+        MainWindowDetails.add(cWtext);
+        super.add(MainWindowDetails);
+    }
+    
     public void fillingWalletDetails(){
-        JPanel wI = new JPanel();
-        wI.setLayout(new GridLayout(5,1));
+        super.getContentPane().removeAll();
+        JPanel WalletDetails = new JPanel();
+        JPanel wd1 = new JPanel();
+        JPanel wd2 = new JPanel();
+        //WalletDetails.setLayout(new BorderLayout());
+        WalletDetails.setLayout(new BoxLayout(WalletDetails, BoxLayout.Y_AXIS));
+        wd2.setLayout(new BoxLayout(wd2, BoxLayout.Y_AXIS));
         
-        JLabel title = new JLabel("Wallet Created !", SwingConstants.CENTER);
-        JLabel name = new JLabel("Name: "+w.getName(), SwingConstants.CENTER);
-        JLabel balance = new JLabel("Balance: "+w.getBalance(), SwingConstants.CENTER);
+        JLabel title = new JLabel("Wallet Created !");
         
-        wI.add(title);
-        wI.add(name);
-        wI.add(balance);
+        JPanel namePanel = new JPanel();
+        JLabel name = new JLabel("Name: ");
+        JTextField wName = new JTextField(w.getName());
+        namePanel.add(name);
+        namePanel.add(wName);
         
-        super.add(wI);
+        JPanel balancePanel = new JPanel();
+        JLabel balance = new JLabel("Balance: ");
+        JTextField wBalance = new JTextField(""+w.getBalance());
+        balancePanel.add(balance);
+        balancePanel.add(wBalance);
+        
+        wd1.add(title);
+        wd1.add(new JLabel(new ImageIcon(img)));
+//        WalletDetails.add(wd1, BorderLayout.NORTH);
+        WalletDetails.add(wd1);
+        
+        wd2.add(namePanel);
+        wd2.add(balancePanel);
+        
+//        WalletDetails.add(wd2, BorderLayout.CENTER);
+        WalletDetails.add(wd2);
+
+        super.add(WalletDetails);
         
     }
     
