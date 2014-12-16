@@ -1,6 +1,6 @@
 #JWallet
 
-A virtual wallet in java
+The objective of this project was to create an application that could manage your wallet with operations like depositing or withdrawing money, and loging all the transactions so the user could easily see where he spent his money, or where did the money come from. The project is yet to be finished, its a personal project so I work on it from time to time.
 
 ####Main Screen
 ![Main Screen](http://i.imgur.com/HENDv4O.png)
