@@ -18,24 +18,30 @@ import java.util.Date;
  */
 public class Deposit  implements Serializable{
     
-    String array[];
-    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+    /*
+    Array that stores information about the transition
+        Position 0 - Type of transition
+        Position 1 - Ammount of money
+        Position 2 - Reason of transition
+        Position 3 - Date of the transition
+    */
+    String[] depositInformation;
+    
     float amount;
     String reason;
     Date date;
-    Wallet w;
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
     
-    public Deposit(float amount, String reason, Wallet w){
+    public Deposit(float amount, String reason){
         this.amount = amount;
         this.reason = reason;
-        date = new Date();
-        w.setBalance(w.getBalance() + amount);
-        w.getDeposits().add(this);
-        array = new String[4];
-        array[0] = "Deposit";
-        array[1] = Float.toString(amount)+" €";
-        array[2] = reason;
-        array[3] = dateFormat.format(getDate());
+        this.date = new Date();
+        
+        depositInformation = new String[4];
+        depositInformation[0] = "Deposit";
+        depositInformation[1] = Float.toString(amount)+" €";
+        depositInformation[2] = reason;
+        depositInformation[3] = dateFormat.format(getDate());
         
     }
     
@@ -63,12 +69,12 @@ public class Deposit  implements Serializable{
         this.date = date;
     }
     
-    public String[] getArrayDeposit(){
-           return array;
+    public String[] getDepositInformation(){
+           return depositInformation;
     }
     
     public String toString(){
-        return "Deposit: "+getAmount()+" Reason: "+getReason()+ " Date: "+ dateFormat.format(getDate());
+        return "Deposit: "+getAmount()+" €\n Reason: "+getReason()+ " \nDate: "+ dateFormat.format(getDate());
     }
     
 }

@@ -5,7 +5,6 @@
  */
 package jwalletUI;
 
-
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -32,27 +31,36 @@ import jwalletController.*;
  */
 public class MainWindow extends JFrame {
 
+    //Windows variables
+    public static final int WINDOW_WIDTH = 600;
+    public static final int WINDOW_HEIGHT = 400;
+    public static final String WINDOW_TITLE = "jWallet";
+
+    //Menu bar variables
     JMenuBar mb;
     JMenu wallet, info, date;
     JMenuItem open, create, save, load, exit, help;
+
+    //Boolean values for opening and closing wallet
     Boolean isOpen = false;
     Boolean close = false;
 
+    //Objects later to be created
     CreatingWalletWindow cw;
     Wallet w;
-    Image img = Toolkit.getDefaultToolkit().createImage("src/resources/wallet.png");
 
-    
-    
+    //jWallet icon
+    Image icon = Toolkit.getDefaultToolkit().createImage("src/resources/wallet.png");
+
     public MainWindow() {
         //basic window configuration
         super();
-        super.setSize(600, 400);
+        super.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         super.setLocationRelativeTo(null);
-        super.setTitle("JWallet");
+        super.setTitle(WINDOW_TITLE);
         super.setResizable(false);
-        super.setUndecorated(true);
-        
+        super.setUndecorated(false);
+
         //changing L&F
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -78,10 +86,7 @@ public class MainWindow extends JFrame {
         });
 
         //setting the icon
-        setIconImage(img);
-
-        //Adding the Main Window introduction
-        fillingMainWindow();
+        setIconImage(icon);
 
         //setting the menu
         super.setJMenuBar(createMenuBar());
@@ -89,7 +94,6 @@ public class MainWindow extends JFrame {
         super.setVisible(true);
     }
 
-    
     // Menu bar
     public JMenuBar createMenuBar() {
         mb = new JMenuBar();
@@ -138,12 +142,12 @@ public class MainWindow extends JFrame {
                             addWalletMenu(w);
                             open.setEnabled(false);
                             isOpen = true;
-                            
+
                             revalidate();
                         } else {
                             JOptionPane.showMessageDialog(null, "Wrong Password!");
                         }
-                }
+                    }
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Wallet not created yet !", "Error", JOptionPane.OK_OPTION);
@@ -172,7 +176,6 @@ public class MainWindow extends JFrame {
                     create.setEnabled(false);
                     open.setEnabled(true);
                     save.setEnabled(true);
-                    fillingWalletDetails();
                     revalidate();
                 }
             }
@@ -181,58 +184,6 @@ public class MainWindow extends JFrame {
         return create;
     }
 
-    public void fillingMainWindow(){
-        super.getContentPane().removeAll();
-        
-        JPanel MainWindowDetails = new JPanel();
-        JLabel cWtext = new JLabel("Welcome to jWallet. Create your wallet in the file menu.");
-        
-        MainWindowDetails.add(cWtext);
-        super.add(MainWindowDetails);
-    }
-    
-    public void fillingWalletDetails(){
-        super.getContentPane().removeAll();
-        JPanel WalletDetails = new JPanel();
-        JPanel wd1 = new JPanel();
-        JPanel wd2 = new JPanel();
-        //WalletDetails.setLayout(new BorderLayout());
-        WalletDetails.setLayout(new BoxLayout(WalletDetails, BoxLayout.Y_AXIS));
-        wd2.setLayout(new BoxLayout(wd2, BoxLayout.Y_AXIS));
-        
-        JLabel title = new JLabel("Wallet Created !");
-        
-        JPanel namePanel = new JPanel();
-        JLabel name = new JLabel("Name: ");
-        JTextField wName = new JTextField(10);
-        wName.setText(w.getName());
-        wName.setEditable(false);
-        namePanel.add(name);
-        namePanel.add(wName);
-        
-        JPanel balancePanel = new JPanel();
-        JLabel balance = new JLabel("Balance: ");
-        JTextField wBalance = new JTextField(10);
-        wBalance.setText(""+w.getBalance());
-        wBalance.setEditable(false);
-        balancePanel.add(balance);
-        balancePanel.add(wBalance);
-        
-        wd1.add(title);
-        wd1.add(new JLabel(new ImageIcon(img)));
-//        WalletDetails.add(wd1, BorderLayout.NORTH);
-        WalletDetails.add(wd1);
-        
-        wd2.add(namePanel);
-        wd2.add(balancePanel);
-        
-//        WalletDetails.add(wd2, BorderLayout.CENTER);
-        WalletDetails.add(wd2);
-
-        super.add(WalletDetails);
-        
-    }
-    
     //Button that saves the wallet in a file
     public JMenuItem createSaveItem() {
         save = new JMenuItem("Save");

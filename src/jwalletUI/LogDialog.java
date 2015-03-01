@@ -24,31 +24,35 @@ import jwalletController.*;
  */
 public class LogDialog extends JDialog {
 
+    public static final int WINDOW_WIDTH = 700;
+    public static final int WINDOW_HEIGHT = 500;
+    public static final String WINDOW_TITLE = "Log";
+    
     public Wallet w;
 
-    JPanel top, bottom, exit, emptyPanel;
-    JLabel spentLabel, emptyLabel;
-    JTextField spentInput;
+    JPanel moneySpentPanel, tablePanel, exit, emptyPanel;
+    JLabel moneySpentLabel, emptyLabel;
+    JTextField moneySpentInput;
 
-    JTable table;
-    String data[][];
-    String names[];
+    JTable logTable;
+    String[][] transitions;
+    String[] tableHeaders;
 
     public LogDialog(Wallet w) {
         super();
-        super.setSize(700, 500);
+        super.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         super.setLocationRelativeTo(null);
         super.setModal(true);
         super.setLayout(new BorderLayout());
-        super.setTitle("Log");
+        super.setTitle(WINDOW_TITLE);
 
         this.w = w;
 
         if (w.getDeposits().isEmpty() && w.getWithdraws().isEmpty()) {
             super.add(createEmptyPanel());
         } else {
-            super.add(createTopPanel(), BorderLayout.NORTH);
-            super.add(createBottomPanel(), BorderLayout.CENTER);
+            super.add(createMoneySpentPanel(), BorderLayout.NORTH);
+            super.add(createLogTablePanel(), BorderLayout.CENTER);
             super.add(createExit(), BorderLayout.SOUTH);
         }
         super.setVisible(true);
@@ -59,17 +63,17 @@ public class LogDialog extends JDialog {
      *
      * @return
      */
-    public JPanel createTopPanel() {
-        top = new JPanel();
+    public JPanel createMoneySpentPanel() {
+        moneySpentPanel = new JPanel();
 
-        spentLabel = new JLabel("Money spent :");
-        spentInput = new JTextField();
-        spentInput.setText(Float.toString(w.getSpendings()) + " €");
-        spentInput.setEditable(false);
+        moneySpentLabel = new JLabel("Money spent :");
+        moneySpentInput = new JTextField();
+        moneySpentInput.setText(Float.toString(w.getSpendings()) + " €");
+        moneySpentInput.setEditable(false);
 
-        top.add(spentLabel);
-        top.add(spentInput);
-        return top;
+        moneySpentPanel.add(moneySpentLabel);
+        moneySpentPanel.add(moneySpentInput);
+        return moneySpentPanel;
     }
 
     /**
@@ -77,42 +81,43 @@ public class LogDialog extends JDialog {
      *
      * @return
      */
-    public JPanel createBottomPanel() {
+    public JPanel createLogTablePanel() {
         int size = w.getDeposits().size() + w.getWithdraws().size();
-        data = new String[size][4];
-        names = new String[4];
-        names[0] = "Type";
-        names[1] = "Amount";
-        names[2] = "Reason";
-        names[3] = "Date";
+        transitions = new String[size][4];
+        
+        tableHeaders = new String[4];
+        tableHeaders[0] = "Type";
+        tableHeaders[1] = "Amount";
+        tableHeaders[2] = "Reason";
+        tableHeaders[3] = "Date";
 
         for (int i = 0; i < w.getDeposits().size(); i++) {
-            data[i] = w.getDeposits().get(i).getArrayDeposit();
+            transitions[i] = w.getDeposits().get(i).getDepositInformation();
         }
         for (int j = w.getDeposits().size(); j < size; j++) {
-            data[j] = w.getWithdraws().get(j - w.getDeposits().size()).getArrayWithdraw();
+            transitions[j] = w.getWithdraws().get(j - w.getDeposits().size()).getWithdrawInformation();
         }
 
-        table = new JTable(data, names);
-        table.setModel(new AbstractTableModel() {
+        logTable = new JTable(transitions, tableHeaders);
+        logTable.setModel(new AbstractTableModel() {
 
             public String getColumnName(int column) {
-                return names[column];
+                return tableHeaders[column];
             }
 
             @Override
             public int getRowCount() {
-                return data.length;
+                return transitions.length;
             }
 
             @Override
             public int getColumnCount() {
-                return data[0].length;
+                return transitions[0].length;
             }
 
             @Override
             public Object getValueAt(int i, int i1) {
-                return data[i][i1];
+                return transitions[i][i1];
             }
 
             public Class<?> getColumnClass(int columnIndex) {
@@ -124,51 +129,39 @@ public class LogDialog extends JDialog {
             }
         });
 
-        table.getColumnModel().getColumn(3).setPreferredWidth(90);
-        table.getTableHeader().setReorderingAllowed(false);
+        logTable.getColumnModel().getColumn(3).setPreferredWidth(90);
+        logTable.getTableHeader().setReorderingAllowed(false);
 
-        table.setAutoCreateRowSorter(true);
+        logTable.setAutoCreateRowSorter(true);
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        table.setFillsViewportHeight(true);
+        JScrollPane scrollPane = new JScrollPane(logTable);
+        logTable.setFillsViewportHeight(true);
 
-        bottom = new JPanel();
-        bottom.add(scrollPane);
+        tablePanel = new JPanel();
+        tablePanel.add(scrollPane);
 
-        return bottom;
+        return tablePanel;
     }
 
     public JPanel createEmptyPanel() {
         emptyPanel = new JPanel();
+        Image emptyImage = Toolkit.getDefaultToolkit().createImage("src/resources/empty.png");
 
-        Image img = Toolkit.getDefaultToolkit().createImage("src/resources/empty.png");
-        JLabel image = new JLabel(new ImageIcon(img));
+        JLabel image = new JLabel(new ImageIcon(emptyImage));
         emptyPanel.setLayout(new GridLayout(3, 1));
 
-        JButton exit = new JButton();
-        exit.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                dispose();
-            }
-        });
-        exit.setVisible(false);
 
         emptyLabel = new JLabel("<html><font size=\"3\"><center>You still haven't made "
                 + "any transactions ! Go make some "
-                + "right now !<br><br>"
-                + "<br><font size=\"1\">press enter to close</font></center></font></html>");
+                + "right now !<br><br>");
 
         super.setSize(250, 330);
         super.setLocationRelativeTo(null);
-        super.setUndecorated(true);
+        super.setUndecorated(false);
 
         emptyPanel.add(image);
         emptyPanel.add(emptyLabel);
-        emptyPanel.add(exit);
-
-        getRootPane().setDefaultButton(exit);
+        emptyPanel.add(createExit());
 
         return emptyPanel;
     }

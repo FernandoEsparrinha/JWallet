@@ -17,25 +17,30 @@ import javax.swing.JOptionPane;
  */
 public class Withdraw implements Serializable{
 
-    String array[];
-    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+    /*
+    Array that stores information about the transition
+        Position 0 - Type of transition
+        Position 1 - Ammount of money
+        Position 2 - Reason of transition
+        Position 3 - Date of the transition
+    */
+    String[] withdrawInformation;
+    
     float amount;
     String reason;
     Date date;
-    Wallet w;
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
 
-    public Withdraw(float amount, String reason, Wallet w) {
+    public Withdraw(float amount, String reason) {
             this.amount = amount;
             this.reason = reason;
-            date = new Date();
-            w.setBalance(w.getBalance() - amount);
-            w.getWithdraws().add(this);
-            w.setSpendings(w.getSpendings() + amount);
-            array = new String[4];
-            array[0] = "Withdraw";
-            array[1] = Float.toString(amount)+" €";
-            array[2] = reason;
-            array[3] = dateFormat.format(getDate());
+            this.date = new Date();
+            
+            withdrawInformation = new String[4];
+            withdrawInformation[0] = "Withdraw";
+            withdrawInformation[1] = Float.toString(amount)+" €";
+            withdrawInformation[2] = reason;
+            withdrawInformation[3] = dateFormat.format(getDate());
     }
 
     
@@ -63,13 +68,11 @@ public class Withdraw implements Serializable{
         this.date = date;
     }
     
-    public String[] getArrayWithdraw(){
-           return array;
+    public String[] getWithdrawInformation(){
+           return withdrawInformation;
     }
     
-    
     public String toString(){
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
         return "Withdraw: "+getAmount()+" Reason: "+getReason()+ " Date: "+ dateFormat.format(getDate());
     }
 

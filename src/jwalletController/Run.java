@@ -13,7 +13,7 @@ import jwalletUI.MainWindow;
  *
  * @author fernando
  */
-public class Jwallet {
+public class Run {
 
     /**
      * @param args the command line arguments
